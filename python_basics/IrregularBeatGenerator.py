@@ -1,56 +1,142 @@
-import random as ra                                                             #Importeerd libraries en geeft het een alias
-import simpleaudio as sa                                                        #""
-import time as t                                                                #""
-import sched as sch                                                             #""
+# Import libraries and assign alias
+import random as ra
+import simpleaudio as sa
+import time as t
+import sched as sch
+import threading as th
+import math as m
+from midiutil import MIDIFile
+from datetime import datetime
 
-hihat = sa.WaveObject.from_wave_file("hihat.wav")                               #Laad bestanden en definieert het als object
-snare = sa.WaveObject.from_wave_file("snare.wav")                               #""
-kick = sa.WaveObject.from_wave_file("kick.wav")                                 #""
+# Load files and define as objects
+hihat = sa.WaveObject.from_wave_file("hihat.wav")
+snare = sa.WaveObject.from_wave_file("snare.wav")
+kick = sa.WaveObject.from_wave_file("kick.wav")
 
-while True:                                                                     #Loop voor het vragen van de maatsoort
-    measure = list(input("Enter your time signature: ").split('/'))             #Vraagt de maatsoort en split op de /
-    sixteenths = (int(measure[0])*4)/(int(measure[1])/4)                        #Rekend uit hoeveel 16es in de maat zitten
-    if sixteenths > 20:                                                         #Als de maatsoort te veel 16es bevat:
-        print('Unsupported time signature.')                                    #Waarschuwt de gebruiker
-        retry_tms = input("Retry? Y/N ").upper()                                #Vraagt of de gebruiker opnieuw wilt doen, en maakt hoofdletters
-        if retry_tms == "Y":                                                    #Als de gebruiker Y invult:
-            continue                                                            #Herstart de Loop
-        else:                                                                   #Als de gebruiker iets anders invult:
-            quit()                                                              #Stopt het programma
-    else:                                                                       #Als de maatsoort 20 of minder 16es bevat:
-        break                                                                   #Stop de loop en ga verder
+# Loop for asking the time signature, will ask to restart or quit if input unexpected.
+while True:
+    measure = list(input("Enter your time signature: ").split('/'))
+    if len(measure) == 2 and measure[0].isdigit() and measure[1].isdigit() and int(measure[0]) >= 1 and int(measure[1]) >= 1:
+        sixteenths = (int(measure[0])*4)/(int(measure[1])/4)
+        if sixteenths > 20:
+            print('Unsupported time signature.')
+            retry_tms = input("Retry? Y/N ").upper()
+            if retry_tms == "Y":
+                continue
+            else:
+                quit()
+        else:
+            break
+    else:
+        print('Invalid input, please enter two numbers, seperated by a "/".')
+        retry_tms = input("Retry? Y/N ").upper()
+        if retry_tms == "Y":
+            continue
+        else:
+            quit()
 
-while True:                                                                     #Loop voor het vragen van de BPM is ms
+
+# Loop for asking the tempo, will ask to restart or quit if input unexpected.
+while True:
     bpm = input("Enter your desired BPM: ")
     if not bpm.isdigit():
         print('Invalid input, please enter a number.')
-        retry_tmp = input("Retry? Y/N ").upper()                                #Vraagt of de gebruiker opnieuw wilt doen, en maakt hoofdletters
-        if retry_tmp == "Y":                                                    #Als de gebruiker Y invult
-            continue                                                            #Herstart de Loop
-        else:                                                                   #Als de gebruiker iets anders invult:
+        retry_tmp = input("Retry? Y/N ").upper()
+        if retry_tmp == "Y":
+            continue
+        else:
             quit()
+    if float(bpm) > 1000 or float(bpm) < 1:
+        print('Unsupported tempo.')
+        retry_tmp = input("Retry? Y/N ").upper()
+        if retry_tmp == "Y":
+            continue
+        else:
+            quit()
+    else:
+        note_time = (60000/float(bpm))/4000
+        break
 
-    if int(bpm) > 1000 or int(bpm) < 1:                                                        #Als de tijd voor een 16e langer is dan 1 seconde:
-        print('Unsupported tempo.')                                             #Waarschuwt de gebruiker
-        retry_tmp = input("Retry? Y/N ").upper()                                #Vraagt of de gebruiker opnieuw wilt doen, en maakt hoofdletters
-        if retry_tmp == "Y":                                                    #Als de gebruiker Y invult
-            continue                                                            #Herstart de Loop
-        else:                                                                   #Als de gebruiker iets anders invult:
-            quit()                                                              #Stopt het programma
-    else:                                                                       #Als een 16e korter dan 1 seconde is:
-        note_time = (60000/int(bpm))/4                                              #Vraagt de BPM op en maakt dit de waarde van een 16e
-        break                                                                   #Stop de loop en ga verder
+# Probability table for the 3 instruments, every second order list is a 16th
+# the 3 floats are the probabilities for hihat, snare and kick respectively
+prob = [[1, 0, 1], [0.125, 0, 0], [0.75, 0.25, 0.25], [0.25, 0.125, 0],
+    [1, 0.75, 0.25], [0.125, 0, 0], [0.875, 0.125, 0.5], [0.125, 0.125, 0.125],
+    [1, 0.125, 0.5], [0.25, 0, 0.125], [0.875, 0.25, 0.25],
+    [0.125, 0.125, 0.25], [1, 0.75, 0.25], [0.25, 0, 0], [0.75, 0.25, 0.25],
+    [0.25, 0.125, 0], [1, 0.125, 0.5], [0.25, 0, 0.125], [0.875, 0.25, 0.25],
+    [0.125, 0.125, 0.25]]
 
-prob = [[1, 0, 1], [0.125, 0, 0], [0.75, 0.25, 0.25], [0.25, 0.125, 0],         #Kanstabel van de 3 verschillende instrumenten
-    [1, 0.75, 0.25], [0.125, 0, 0], [0.875, 0.125, 0.5], [0.125, 0.125, 0.125], #""
-    [1, 0.125, 0.5], [0.25, 0, 0.125], [0.875, 0.25, 0.25],                     #""
-    [0.125, 0.125, 0.25], [1, 0.75, 0.25], [0.25, 0, 0], [0.75, 0.25, 0.25],    #""
-    [0.25, 0.125, 0], [1, 0.125, 0.5], [0.25, 0, 0.125], [0.875, 0.25, 0.25],   #""
-    [0.125, 0.125, 0.25]]                                                       #""
-sample = [hihat, snare, kick]                                                   #Maakt een lijst van de 3 samples aan.
-play_notes = [[0, 0, 0] for i in range(20)]                                     #Makes empty list for the results of the comparison
+# Makes a list of the 3 samples for playback
+sample = [hihat, snare, kick]
 
-for i in range(int(sixteenths)):                                                #Cycled eerst door de lijst van 16es
-    for x in range(3):                                                          #Cycled daarna door de lijst van 3 instrumenten
-        if ra.random() < prob[i][x]:                                            #vergelijkt de kans uit de tabel met een random nummer
-            play_notes[i][x] = 1                                                #Sets place in play_notes to true
+# Makes empty list for the results of the comparison
+play_notes = [[0, 0, 0] for i in range(int(sixteenths))]
+
+# Compares te probabilities to a random float, sets place in list to true if higher
+for i in range(int(sixteenths)):
+    for x in range(3):
+        if ra.random() < prob[i][x]:
+            play_notes[i][x] = 1
+
+# boolean to stop the playback loop
+stop_playback = 0
+
+# playback function
+def playback():
+    while True:
+        start_time = t.time()
+        for i in range(int(sixteenths)):
+            for x in range(3):
+                if play_notes[i][x] == 1:
+                    sample[x].play()
+            while t.time() - start_time < int(i+1) * note_time:
+                t.sleep(0.001)
+        if stop_playback:
+            break
+
+class myThread1(th.Thread):
+# constructor calls threading init
+    def __init__(self,threadID):
+        th.Thread.__init__(self)
+        self.threadID = threadID
+# runs the playback function
+    def run(self):
+        playback()
+
+# calls the threads
+thread1 = myThread1(1)
+
+# Start the threads
+thread1.start()
+
+# Stops thread with any input
+input("Press enter to stop")
+stop_playback = 1
+
+# Wait for both threads to finish
+thread1.join()
+
+MyMIDI = MIDIFile(1) # One track, defaults to format 1 (tempo track automatically created)
+MyMIDI.addTempo(0, 0, int(bpm))
+MyMIDI.addTimeSignature(0, 0, int(measure[0]), int(m.log2(int(measure[1]))), 24, 8)
+
+for i in range(int(sixteenths)):
+    for x in range(3):
+        if x == 0:
+            pitch = 42
+        elif x == 1:
+            pitch = 38
+        elif x == 2:
+            pitch = 36
+        if play_notes[i][x] == 1:
+            MyMIDI.addNote(0, 9, pitch, (i/4), 0.25, int(60 + (67 * prob[i][x])))
+
+
+save_file = input("Do you want to save this beat? Y/N ").upper()
+if save_file == "Y":
+    filename = measure[0] + "_" + measure[1] + "_beat_at_" + datetime.now().strftime("%H:%M:%S") + ".mid"
+    print(filename)
+    with open(filename, "wb") as output_file:
+        MyMIDI.writeFile(output_file)
+else:
+    quit()
