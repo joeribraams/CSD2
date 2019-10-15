@@ -18,7 +18,7 @@ while True:
     measure = list(input("Enter your time signature: ").split('/'))
     if len(measure) == 2 and measure[0].isdigit() and measure[1].isdigit() and int(measure[0]) >= 1 and int(measure[1]) >= 1:
         sixteenths = (int(measure[0])*4)/(int(measure[1])/4)
-        if sixteenths > 20:
+        if sixteenths > 20 or sixteenths < 1:
             print('Unsupported time signature.')
             retry_tms = input("Retry? Y/N ").upper()
             if retry_tms == "Y":
@@ -28,7 +28,7 @@ while True:
         else:
             break
     else:
-        print('Invalid input, please enter two numbers, seperated by a "/".')
+        print('Invalid input, please enter two positive numbers, seperated by a "/".')
         retry_tms = input("Retry? Y/N ").upper()
         if retry_tms == "Y":
             continue
@@ -40,7 +40,7 @@ while True:
 while True:
     bpm = input("Enter your desired BPM: ")
     if not bpm.isdigit():
-        print('Invalid input, please enter a number.')
+        print('Invalid input, please enter a positive number.')
         retry_tmp = input("Retry? Y/N ").upper()
         if retry_tmp == "Y":
             continue
@@ -94,27 +94,19 @@ def playback():
         if stop_playback:
             break
 
-class myThread1(th.Thread):
-# constructor calls threading init
-    def __init__(self,threadID):
-        th.Thread.__init__(self)
-        self.threadID = threadID
-# runs the playback function
-    def run(self):
-        playback()
+# Make the thread
+playbackthread = th.thread(target=playback)
+playbackthread.daemon = True
 
-# calls the threads
-thread1 = myThread1(1)
-
-# Start the threads
-thread1.start()
+# Start the thread
+playbackthread.start()
 
 # Stops thread with any input
 input("Press enter to stop")
 stop_playback = 1
 
 # Wait for both threads to finish
-thread1.join()
+playbackthread.join()
 
 MyMIDI = MIDIFile(1) # One track, defaults to format 1 (tempo track automatically created)
 MyMIDI.addTempo(0, 0, int(bpm))
