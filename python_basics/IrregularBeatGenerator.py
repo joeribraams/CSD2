@@ -88,7 +88,7 @@ while True:
     def playback():
         while True:
             start_time = time.time()
-            # Loops through the list of 16th note steps and tests all 3 instruments
+            # Loops through the list of 16th note steps and tests all 3 instruments against random number
             for i in range(int(sixteenths)):
                 for x in range(3):
                     if play_notes[i][x] == 1:
