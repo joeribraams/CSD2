@@ -1,17 +1,5 @@
 #include <iostream>
-
-class Oscillator
-{
-public:
-  Oscillator(float freq);
-  ~Oscillator();
-
-  void setFreq(float freq);
-  float getFreq();
-
-private:
-  float freq;
-};
+#include "Oscillator.h"
 
 Oscillator::Oscillator(float freq)
 {
@@ -38,13 +26,4 @@ float Oscillator::getFreq()
 {
   return freq;
   std::cout << "Oscillator - getFreq\n";
-}
-
-int main()
-{
-  Oscillator oscillator(220);
-  oscillator.setFreq(-1);
-  std::cout << "Oscillator freq is " << oscillator.getFreq() << "\n";
-  // end of main
-  return 0;
 }
