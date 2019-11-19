@@ -11,7 +11,7 @@ class Instrument
     Instrument() //constructor
     {
       type = Guitar; //default values
-      playAmount = 1;
+      playTimes = 1;
     }
 
     int setType(std::string newType)
@@ -19,20 +19,20 @@ class Instrument
       type = newType;
     }
 
-    int roll(int rollTimes)
+    int roll(int newTimes)
     {
-      playAmount = rollTimes;
+      playTimes = newTimes;
     }
 
     int play()
     {
-      for( int i = 0; i < playAmount; i = i + 1 ) {
+      for( int i = 0; i < playTimes; i = i + 1 ) {
         std::cout << type << std::endl;
       }
     }
 
     std::string type;
-    int playAmount;
+    int playTimes;
 };
 
 int main()
