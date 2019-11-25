@@ -2,6 +2,7 @@
 #include <string>
 #include "InstrumentClasses.h"
 
+
 std::string Guitar = "Plink";
 std::string Synth = "Bliep";
 std::string Voice = "Aaaaaa";

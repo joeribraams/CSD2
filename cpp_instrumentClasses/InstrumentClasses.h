@@ -3,12 +3,13 @@ class Instrument
 public:
   Instrument();
   ~Instrument();
-  int setType(std::string newType);
-  int roll(int newTimes);
-  int play();
+  void setType(std::string newType);
+  void roll(int newTimes);
+  void play();
 
   std::string type;
-  
+  std::string Guitar;
+
 private:
   int playTimes;
 };

@@ -2,22 +2,28 @@
 #include <string>
 #include "InstrumentClasses.h"
 
-InstrumentClasses::Instrument()
+Instrument::Instrument()
 {
-  this->type = Guitar; //default values
+  type = "Plink"; //default values
   playTimes = 1;
 }
-int InstrumentClasses::setType(std::string newType)
+
+Instrument::~Instrument()
+{
+  std::cout << "Instrument - Destructor\n";
+}
+
+void Instrument::setType(std::string newType)
 {
   this->type = newType;
 }
 
-int InstrumentClasses::roll(int newTimes)
+void Instrument::roll(int newTimes)
 {
   this->playTimes = newTimes;
 }
 
-int InstrumentClasses::play()
+void Instrument::play()
 {
   for( int i = 0; i < playTimes; i = i + 1 )
   {
