@@ -1,9 +1,8 @@
 #include <iostream>
 #include "Oscillator.h"
 
-Oscillator::Oscillator(float freq)
+Oscillator::Oscillator(float freq) : freq(freq)
 {
-  this->freq = freq;
   std::cout << "Oscillator - Constructor\n";
 }
 
@@ -18,12 +17,11 @@ void Oscillator::setFreq(float freq)
     std::cout << "ERROR, cant set frequency to " << freq << "\n";
     return;
   }
-  this->freq = freq;
   std::cout << "Oscillator - setFreq\n";
 }
 
 float Oscillator::getFreq()
 {
-  return freq;
   std::cout << "Oscillator - getFreq\n";
+  return freq;
 }
