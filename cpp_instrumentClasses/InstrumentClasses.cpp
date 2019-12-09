@@ -9,6 +9,11 @@ Instrument::Instrument()
   playTimes = 1;
 }
 
+Instrument::Instrument(std::string type)
+{
+  setType(type);
+  playTimes = 1;
+}
 //Destructor
 Instrument::~Instrument()
 {

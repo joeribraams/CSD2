@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string>
-#include "InstrumentClasses.h"
+#include "Instrument.h"
 
-
-std::string Guitar = "Plink";
-std::string Synth = "Bliep";
-std::string Voice = "Aaaaaa";
+int Guitar = 0; //"Plink"
+int Synth = 1; //"Bliep"
+int Voice = 2; //"Aaaaaa"
 
 int main()
 {

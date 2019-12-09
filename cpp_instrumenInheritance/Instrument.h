@@ -6,14 +6,11 @@ public:
   ~Instrument();
 
   //Methods
-  void setType(std::string newType);
+  void setType(int newType);
   void roll(int newTimes);
   void play();
 
   //Class variables
-  std::string type;
-  std::string Guitar;
-
-private:
+  int type;
   int playTimes;
 };
