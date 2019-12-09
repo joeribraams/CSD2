@@ -9,6 +9,7 @@ public:
   void play(int playTimes);
 
 private:
+  //Preset range of instrument
   int rangeLow = 46;
   int rangeHigh = 70;
 };

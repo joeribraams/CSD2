@@ -6,6 +6,7 @@ int Guitar = 0; //"Plink"
 int Synth = 1; //"Bliep"
 int Voice = 2; //"Aaaaaa"
 
+//calls classes and plays come combinations
 int main()
 {
   Instrument inst1;
