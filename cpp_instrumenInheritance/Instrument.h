@@ -1,3 +1,5 @@
+#pragma once
+
 class Instrument
 {
 public:
@@ -6,11 +8,11 @@ public:
   ~Instrument();
 
   //Methods
-  void setType(int newType);
-  void roll(int newTimes);
-  void play();
+  void play(int playTimes);
 
   //Class variables
-  int type;
   int playTimes;
+
+protected:
+  std::string sound;
 };

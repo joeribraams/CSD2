@@ -1,12 +1,14 @@
-class Gitaar
+#include "Instrument.h"
+
+class Guitar : public Instrument
 {
 public:
   //Constructor and Destructor
-  Gitaar();
-  ~Gitaar();
+  Guitar();
+  ~Guitar();
 
-  //Methods
-  void play(int playTimes);
+  //variables
+  int type = 0;
 
 private:
   //Preset range of instrument

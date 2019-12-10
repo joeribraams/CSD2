@@ -1,25 +1,20 @@
 #include <iostream>
 #include <string>
-#include "Instrument.h"
+#include "Guitar.h"
+#include "Voice.h"
+#include "Synth.h"
 
-int Guitar = 0; //"Plink"
-int Synth = 1; //"Bliep"
-int Voice = 2; //"Aaaaaa"
 
 //calls classes and plays come combinations
 int main()
 {
-  Instrument inst1;
-  Instrument inst2;
+  Guitar guitar1;
+  Synth synth1;
+  Voice voice1;
 
-  inst1.roll(5);
-  inst1.play();
-  inst2.setType(Voice);
-  inst2.roll(2);
-  inst2.play();
-  inst1.setType(Synth);
-  inst1.roll(3);
-  inst1.play();
+  guitar1.play(5);
+  synth1.play(2);
+  voice1.play(3);
 
   return 0;
 }

@@ -1,12 +1,14 @@
-class Voice
+#include "Instrument.h"
+
+class Voice : public Instrument
 {
 public:
   //Constructor and Destructor
   Voice();
   ~Voice();
 
-  //Methods
-  void play(int playTimes);
+  //variables
+  int type = 1;
 
 private:
   //Preset range of instrument

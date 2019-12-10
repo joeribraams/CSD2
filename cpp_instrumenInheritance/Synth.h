@@ -1,12 +1,14 @@
-class Synth
+#include "Instrument.h"
+
+class Synth : public Instrument
 {
 public:
   //Constructor and Destructor
   Synth();
   ~Synth();
 
-  //Methods
-  void play(int playTimes);
+  //variables
+  int type = 2;
 
 private:
   //Preset range of instrument
