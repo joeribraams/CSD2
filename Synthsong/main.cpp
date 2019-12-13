@@ -3,6 +3,8 @@
 #include "jack_module.h"
 #include "math.h"
 #include "sine.h"
+#include "saw.h"
+#include "subsynth.h"
 
 /*
  * NOTE: jack2 needs to be installed
@@ -24,15 +26,15 @@ int main(int argc,char **argv)
 //  double samplerate = jack.getSamplerate();
 //  double *sampleratepointer = &samplerate;
 
-  Sine sine;
+  subSynth subsynth;
 
   //assign a function to the JackModule::onProces
-  jack.onProcess = [&sine](jack_default_audio_sample_t *inBuf,
+  jack.onProcess = [&subsynth](jack_default_audio_sample_t *inBuf,
     jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
 
 
     for(unsigned int i = 0; i < nframes; i++) {
-      outBuf[i] = sine.sineOut(1, 440);
+      outBuf[i] = subsynth.subSynthOut(110);
     }
 
     return 0;
