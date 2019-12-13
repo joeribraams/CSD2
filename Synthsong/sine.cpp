@@ -14,7 +14,7 @@ Sine::~Sine() {
 
 
 float Sine::sineOut(float amplitude, float frequency) {
-  phase += frequency / samplerate;
+  phase += frequency / 44100;
   sample = amplitude * sin(M_PI * 2 * phase);
   return sample;
 }

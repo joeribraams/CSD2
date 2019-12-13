@@ -9,5 +9,4 @@ public:
 
   float amplitude;
   float frequency;
-  float samplerate = jack.getSamplerate();
 };

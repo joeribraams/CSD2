@@ -21,7 +21,8 @@ int main(int argc,char **argv)
 
   // init the jack, use program name as JACK client name
   jack.init(argv[0]);
-  double samplerate = jack.getSamplerate();
+//  double samplerate = jack.getSamplerate();
+//  double *sampleratepointer = &samplerate;
 
   Sine sine;
 
@@ -31,7 +32,7 @@ int main(int argc,char **argv)
 
 
     for(unsigned int i = 0; i < nframes; i++) {
-      sine.sineOut(1, 440);
+      outBuf[i] = sine.sineOut(1, 440);
     }
 
     return 0;

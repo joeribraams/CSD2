@@ -1,15 +1,12 @@
-CC = g++
-CFLAGS = -I/usr/include -Wall -std=c++1z
+CXX=g++
+CXXFLAGS=-Wall -std=c++14
 LDFLAGS= -ljack
+SOURCE= main.o oscillator.o sine.o jack_module.o
 
-all: example
-
-example : jack_module.o main.o
-	$(CC) -o $@ $(CFLAGS) jack_module.o main.o $(LDFLAGS)
+example: $(SOURCE)
+	$(CXX) -o $@ $(SOURCE) $(LDFLAGS)
 
 .cpp.o:
-	$(CC) -c $< $(CFLAGS)
-
+	$(CXX) -c $(CXXFLAGS) $<
 clean:
-	rm -f *.o
-	rm -f example
+	rm -f example *.o

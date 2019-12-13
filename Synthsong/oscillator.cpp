@@ -7,6 +7,7 @@ Oscillator::Oscillator()
 }
 
 
-Oscillator::~Oscillator() {
+Oscillator::~Oscillator()
+{
   std::cout << "Oscillator - destructor\n";
 }
