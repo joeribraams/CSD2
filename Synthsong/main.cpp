@@ -5,6 +5,7 @@
 #include "sine.h"
 #include "saw.h"
 #include "subsynth.h"
+#include "addsynth.h"
 
 /*
  * NOTE: jack2 needs to be installed
@@ -14,8 +15,6 @@
  * jackd -d coreaudio
  */
 
-#define PI_2 6.28318530717959
-
 int main(int argc,char **argv)
 {
   // create a JackModule instance
@@ -23,18 +22,17 @@ int main(int argc,char **argv)
 
   // init the jack, use program name as JACK client name
   jack.init(argv[0]);
-//  double samplerate = jack.getSamplerate();
-//  double *sampleratepointer = &samplerate;
 
+  addSynth addsynth;
   subSynth subsynth;
 
   //assign a function to the JackModule::onProces
-  jack.onProcess = [&subsynth](jack_default_audio_sample_t *inBuf,
+  jack.onProcess = [&addsynth, &subsynth](jack_default_audio_sample_t *inBuf,
     jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
 
 
     for(unsigned int i = 0; i < nframes; i++) {
-      outBuf[i] = subsynth.subSynthOut(110);
+      outBuf[i] = addsynth.addSynthOut(440) + subsynth.subSynthOut(440);
     }
 
     return 0;

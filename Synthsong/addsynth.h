@@ -1,5 +1,6 @@
 #pragma once
 #include "sine.h"
+#include "saw.h"
 
 class addSynth
 {
