@@ -1,11 +1,16 @@
 #include <iostream>
 #include <thread>
+#include <ctime>
 #include "jack_module.h"
 #include "math.h"
 #include "sine.h"
 #include "saw.h"
 #include "subsynth.h"
 #include "addsynth.h"
+#include "generator.h"
+
+float pitch1 = 440;
+float pitch2 = 110;
 
 /*
  * NOTE: jack2 needs to be installed
@@ -26,13 +31,31 @@ int main(int argc,char **argv)
   addSynth addsynth;
   subSynth subsynth;
 
+  generator generator1;
+  generator generator2;
+
+  time_t start_time1 = time(NULL);
+  time_t start_time2 = time(NULL);
+
   //assign a function to the JackModule::onProces
-  jack.onProcess = [&addsynth, &subsynth](jack_default_audio_sample_t *inBuf,
+  jack.onProcess = [&addsynth, &subsynth, &generator1, &generator2, &start_time1, &start_time2](jack_default_audio_sample_t *inBuf,
     jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
 
-
     for(unsigned int i = 0; i < nframes; i++) {
-      outBuf[i] = addsynth.addSynthOut(440) + subsynth.subSynthOut(440);
+      outBuf[i] = (addsynth.addSynthOut(pitch1) + subsynth.subSynthOut(pitch2)) * 0.7;
+    }
+
+    time_t current_time = time(NULL);
+
+    if (current_time - start_time1 > 1)
+    {
+      start_time1 = current_time;
+      pitch1 = generator1.newnote();
+    }
+    if (current_time - start_time2 > 2)
+    {
+      start_time2 = current_time;
+      pitch2 = generator2.newnote();
     }
 
     return 0;
@@ -40,11 +63,14 @@ int main(int argc,char **argv)
 
   jack.autoConnect();
 
+
   //keep the program running and listen for user input, q = quit
   std::cout << "\n\nPress 'q' when you want to quit the program.\n";
   bool running = true;
   while (running)
   {
+
+
     switch (std::cin.get())
     {
       case 'q':

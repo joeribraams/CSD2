@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-Wall -std=c++14
 LDFLAGS= -ljack
-SOURCE= main.o oscillator.o sine.o saw.o subsynth.o addsynth.o jack_module.o
+SOURCE= main.o generator.o oscillator.o sine.o saw.o subsynth.o addsynth.o jack_module.o
 
 example: $(SOURCE)
 	$(CXX) -o $@ $(SOURCE) $(LDFLAGS)
