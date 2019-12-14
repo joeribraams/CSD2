@@ -12,6 +12,7 @@ addSynth::~addSynth()
   std::cout << "AddSynth - destructor\n";
 }
 
+//inits oscillators and lfo
 Sine sine1;
 Sine sine2;
 Sine sine3;
@@ -19,6 +20,7 @@ Sine sine4;
 Sine sine5;
 Saw envelope;
 
+//adds partials and multiplies them by a saw wave used as an lfo
 float addSynth::addSynthOut(float frequency) {
   output = (sine1.sineOut(0.37, (1 * frequency)) +
             sine2.sineOut(0.67, (1.64 * frequency)) +

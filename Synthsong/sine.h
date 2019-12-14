@@ -12,6 +12,6 @@ public:
   float sineOut(float amplitude, float frequency);
 
 private:
-  float phase;
+  float phase;  // contains the current phase
   float sample; // contains the current sample
 };

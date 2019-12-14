@@ -8,7 +8,9 @@ public:
   subSynth();
   ~subSynth();
 
+  //adds the saws and outputs them
   float subSynthOut(float frequency);
 
+private:
   float output;
 };

@@ -7,6 +7,7 @@ public:
   generator();
   ~generator();
 
+  //outputs new random note
   float newnote();
 
 };

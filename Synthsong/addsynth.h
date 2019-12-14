@@ -9,7 +9,9 @@ public:
   addSynth();
   ~addSynth();
 
+  //member functions
   float addSynthOut(float frequency);
 
+private:
   float output;
 };

@@ -12,6 +12,6 @@ public:
   float sawOut(float amplitude, float frequency);
 
 private:
-  float phase;
+  float phase; // contains the current phase, sorta misused for the saw wave
   float sample; // contains the current sample
 };

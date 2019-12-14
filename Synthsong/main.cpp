@@ -28,12 +28,15 @@ int main(int argc,char **argv)
   // init the jack, use program name as JACK client name
   jack.init(argv[0]);
 
+  // inits the synth modules
   addSynth addsynth;
   subSynth subsynth;
 
+  // inits the note generators
   generator generator1;
   generator generator2;
 
+  //sets start time for note generation
   time_t start_time1 = time(NULL);
   time_t start_time2 = time(NULL);
 
@@ -42,17 +45,21 @@ int main(int argc,char **argv)
     jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
 
     for(unsigned int i = 0; i < nframes; i++) {
+      // mixes synth outputs and attenuates slightly to reduce chance of clipping
       outBuf[i] = (addsynth.addSynthOut(pitch1) + subsynth.subSynthOut(pitch2)) * 0.7;
     }
 
+    // gives current time for note generation
     time_t current_time = time(NULL);
 
-    if (current_time - start_time1 > 1)
+    // gives a new note for pitch1 every second
+    if (current_time - start_time1 >= 1)
     {
       start_time1 = current_time;
       pitch1 = generator1.newnote();
     }
-    if (current_time - start_time2 > 2)
+    // gives a new note for pitch2 every 2 seconds
+    if (current_time - start_time2 >= 2)
     {
       start_time2 = current_time;
       pitch2 = generator2.newnote();
@@ -69,8 +76,6 @@ int main(int argc,char **argv)
   bool running = true;
   while (running)
   {
-
-
     switch (std::cin.get())
     {
       case 'q':
