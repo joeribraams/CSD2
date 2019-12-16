@@ -7,9 +7,6 @@ public:
   Guitar();
   ~Guitar();
 
-  //variables
-  int type = 0;
-
 private:
   //Preset range of instrument
   int rangeLow = 40;

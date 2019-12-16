@@ -7,9 +7,6 @@ public:
   Synth();
   ~Synth();
 
-  //variables
-  int type = 2;
-
 private:
   //Preset range of instrument
   int rangeLow = 0;

@@ -9,8 +9,8 @@
 #include "addsynth.h"
 #include "generator.h"
 
-float pitch1 = 440;
-float pitch2 = 110;
+float pitch1 = 523.2;
+float pitch2 = 130.8;
 
 /*
  * NOTE: jack2 needs to be installed

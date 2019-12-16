@@ -7,9 +7,6 @@ public:
   Voice();
   ~Voice();
 
-  //variables
-  int type = 1;
-
 private:
   //Preset range of instrument
   int rangeLow = 46;
