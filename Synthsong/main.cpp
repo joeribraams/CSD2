@@ -72,16 +72,15 @@ int main(int argc,char **argv)
 
 
   //keep the program running and listen for user input, q = quit
-  std::cout << "\n\nPress 'q' when you want to quit the program.\n";
+  std::cout << "\nPress enter to quit.\n";
   bool running = true;
   while (running)
   {
-    switch (std::cin.get())
+    if (std::cin.get())
     {
-      case 'q':
-        running = false;
-        jack.end();
-        break;
+      running = false;
+      jack.end();
+      break;
     }
   }
 
