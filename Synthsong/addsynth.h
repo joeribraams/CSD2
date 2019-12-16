@@ -12,6 +12,8 @@ public:
   //member functions
   float addSynthOut(float frequency);
 
+  void envReset();
+
 private:
   float output;
 };

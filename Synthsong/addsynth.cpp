@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "addsynth.h"
 
 addSynth::addSynth()
@@ -27,6 +28,10 @@ float addSynth::addSynthOut(float frequency) {
             sine3.sineOut(1, (2.12 * frequency)) +
             sine4.sineOut(0.62, (3.04 * frequency)) +
             sine5.sineOut(0.54, (4.89 * frequency)) ) *
-            ((envelope.sawOut(0.5, 1)-0.5)/2);
+            (pow(envelope.sawOut(1, 0.9), 2));
   return output;
+}
+
+void addSynth::envReset() {
+  envelope.sawReset();
 }

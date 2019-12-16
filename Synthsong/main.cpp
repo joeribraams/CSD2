@@ -1,6 +1,6 @@
 #include <iostream>
 #include <thread>
-#include <ctime>
+#include <chrono>
 #include "jack_module.h"
 #include "math.h"
 #include "sine.h"
@@ -37,31 +37,36 @@ int main(int argc,char **argv)
   generator generator2;
 
   //sets start time for note generation
-  time_t start_time1 = time(NULL);
-  time_t start_time2 = time(NULL);
+  auto start_time1 = std::chrono::high_resolution_clock::now();
+  auto start_time2 = std::chrono::high_resolution_clock::now();
 
   //assign a function to the JackModule::onProces
-  jack.onProcess = [&addsynth, &subsynth, &generator1, &generator2, &start_time1, &start_time2](jack_default_audio_sample_t *inBuf,
-    jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
+  jack.onProcess = [&addsynth, &subsynth, &generator1, &generator2, &start_time1, &start_time2]
+    (jack_default_audio_sample_t *inBuf, jack_default_audio_sample_t *outBuf, jack_nframes_t nframes) {
 
     for(unsigned int i = 0; i < nframes; i++) {
       // mixes synth outputs and attenuates slightly to reduce chance of clipping
       outBuf[i] = (addsynth.addSynthOut(pitch1) + subsynth.subSynthOut(pitch2)) * 0.7;
     }
 
-    // gives current time for note generation
-    time_t current_time = time(NULL);
-
+    // calculates elapsed milliseconds since last note
+    int time1 = std::chrono::duration_cast<std::chrono::milliseconds>
+      (std::chrono::high_resolution_clock::now() - start_time1).count();
     // gives a new note for pitch1 every second
-    if (current_time - start_time1 >= 1)
+    if (time1 >= 1000)
     {
-      start_time1 = current_time;
+      start_time1 = std::chrono::high_resolution_clock::now();
       pitch1 = generator1.newnote();
+      addsynth.envReset();
     }
+
+    // calculates elapsed milliseconds since last note
+    int time2 = std::chrono::duration_cast<std::chrono::milliseconds>
+      (std::chrono::high_resolution_clock::now() - start_time2).count();
     // gives a new note for pitch2 every 2 seconds
-    if (current_time - start_time2 >= 2)
+    if (time2 >= 2000)
     {
-      start_time2 = current_time;
+      start_time2 = std::chrono::high_resolution_clock::now();
       pitch2 = generator2.newnote();
     }
 
