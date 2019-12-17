@@ -33,5 +33,5 @@ float addSynth::addSynthOut(float frequency) {
 }
 
 void addSynth::envReset() {
-  envelope.sawReset();
+  envelope.phaseReset();
 }

@@ -21,7 +21,3 @@ float Saw::sawOut(float amplitude, float frequency) {
   sample = amplitude * (phase - 1);
   return sample;
 }
-
-void Saw::sawReset() {
-  phase = 0;
-}

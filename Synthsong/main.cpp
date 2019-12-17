@@ -51,6 +51,7 @@ int main(int argc,char **argv)
     // calculates elapsed milliseconds since last note
     int time = std::chrono::duration_cast<std::chrono::milliseconds>
       (std::chrono::high_resolution_clock::now() - start_time).count();
+
     // gives a new note for pitch1 every second
     if (time >= 1000)
     {
@@ -58,6 +59,7 @@ int main(int argc,char **argv)
       pitch1 = generator.newnote();
       addsynth.envReset();
 
+      // gives a new note for pitch2 every other note
       if (pitchcount == 1) {
         pitchcount = 0;
         pitch2 = generator.newnote();

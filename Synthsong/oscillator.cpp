@@ -11,3 +11,9 @@ Oscillator::~Oscillator()
 {
   std::cout << "Oscillator - destructor\n";
 }
+
+//resets the phase
+void Oscillator::phaseReset()
+{
+  phase = 0;
+}
