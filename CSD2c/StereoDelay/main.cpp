@@ -13,6 +13,7 @@
  * jackd -d coreaudio
  */
 
+// preset settings
 float delayTime = 350;
 float feedback = 0.6;
 float wetLevel = 0.6;
@@ -27,6 +28,7 @@ int main(int argc,char **argv)
   jack.init(argv[0]);
   float sampleRate = jack.getSamplerate();
 
+  // load settings from arguments
   if(argc >= 2) delayTime = (float) atof(argv[1]);
 
   if(argc >= 3) feedback = (float) atof(argv[2]);
@@ -35,15 +37,18 @@ int main(int argc,char **argv)
 
   if(argc >= 5) dryLevel = (float) atof(argv[4]);
 
+  // create the stereoDelay instance
   stereoDelay stereoDelay(sampleRate, delayTime, feedback, wetLevel, dryLevel);
 
-  //assign a function to the JackModule::onProces
+  // assign a function to the JackModule::onProces
   jack.onProcess = [&stereoDelay](jack_default_audio_sample_t *inBuf,
   jack_default_audio_sample_t *outBufL, jack_default_audio_sample_t *outBufR, jack_nframes_t nframes)
   {
     for(unsigned int i = 0; i < nframes; i++)
     {
+      // read the current input sample
       stereoDelay.write(inBuf[i]);
+      // write the output samples for left and right channel
       outBufL[i] = stereoDelay.readLeft();
       outBufR[i] = stereoDelay.readRight();
     }
@@ -63,6 +68,7 @@ int main(int argc,char **argv)
   {
     switch (std::cin.get())
     {
+      // user input for quiting and changing settings
       case 'q':
         running = false;
         jack.end();
